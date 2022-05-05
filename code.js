@@ -113,17 +113,14 @@ function update()
             var distantax = ballz[i].pozx-food[j].pozx;
             var distantay = ballz[i].pozy-food[j].pozy;
             var distanta = Math.sqrt(distantax * distantax + distantay * distantay);
-            if(distanta>120 && distanta<1000)
+            if(distanta>100 && distanta<500)
             {
                 goeatvelocity(ballz[i],food[j]);
             }
-            else
+            if(distanta<100)
             {
                 ballz[i].velx=0;
                 ballz[i].vely=0;
-            }
-            if(distanta<120)
-            {
                 eat(ballz[i],food[j]);
                 food.splice(j, 1);
             }
