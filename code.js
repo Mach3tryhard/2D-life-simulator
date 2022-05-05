@@ -61,6 +61,15 @@ function eat(ball,food)
     ball.hunger++;
 }
 
+function goeatvelocity(ball,food)
+{
+    var distantax = ball.pozx-food.pozx;
+    var distantay = ball.pozy-food.pozy;
+    var distanta = Math.sqrt(distantax * distantax + distantay * distantay);
+    ball.velx=distantax/distanta;
+    ball.vely=distantay/distanta;
+}
+
 function move(ball)
 {
     ball.pozx += ball.velx;
@@ -71,11 +80,11 @@ function move(ball)
 
 function create()
 {
-    for(let i=0;i<10;i++)
+    for(let i=0;i<1;i++)
     {
         ballz.push(makeball());
     }
-    for(let i=0;i<10;i++)
+    for(let i=0;i<1;i++)
     {
         food.push(makefood());
     }
@@ -104,8 +113,15 @@ function update()
             var distantax = ballz[i].pozx-food[j].pozx;
             var distantay = ballz[i].pozy-food[j].pozy;
             var distanta = Math.sqrt(distantax * distantax + distantay * distantay);
+            if(distanta>120 && distanta<10000)
+            {
+                goeatvelocity(ballz[i],food[j]);
+            }
+            else
             if(distanta<120)
             {
+                ballz[i].velx=0;
+                ballz[i].vely=0;
                 eat(ballz[i],food[j]);
                 food.splice(j, 1);
             }
@@ -115,4 +131,4 @@ function update()
 
 create();
 setInterval(update,1);
-setInterval(spawnfood,10000);
+//setInterval(spawnfood,10000);
