@@ -27,7 +27,7 @@ function makeball()
 
     bb.race=Math.floor(Math.random() * 3);
 
-    bb.hunger = 100;
+    bb.hunger = 49;
     bb.velx = 0;
     bb.vely = 0;
     bb.pozx = Math.floor(Math.random() * (window.innerWidth-100));
@@ -39,18 +39,9 @@ function makeball()
     bb.getball.style.borderRadius = '50%';
     bb.getball.style.position = 'absolute';
 
-    if(bb.race==0)
-    {
-        bb.getball.style.background ='#ffffff';  
-    }
-    if(bb.race==1)
-    {
-        bb.getball.style.background ='#000000';  
-    }
-    if(bb.race==2)
-    {
-        bb.getball.style.background ='#ffff00';  
-    }
+    if(bb.race==0)bb.getball.style.background ='#ffffff';  
+    if(bb.race==1)bb.getball.style.background ='#000000';  
+    if(bb.race==2)bb.getball.style.background ='#ffff00';  
     document.body.appendChild(bb.getball);
     return bb;
 }
@@ -72,6 +63,10 @@ function makechildball(ball)
     bb.getball.style.height = 100 + 'px';
     bb.getball.style.borderRadius = '50%';
     bb.getball.style.position = 'absolute';
+    bb.getball.style.background ='#ffff00';
+    if(bb.race==0)bb.getball.style.background ='#ffffff';  
+    if(bb.race==1)bb.getball.style.background ='#000000';  
+    if(bb.race==2)bb.getball.style.background ='#ffff00'; 
 
     document.body.appendChild(bb.getball);
     return bb;
