@@ -1,19 +1,15 @@
 var ballz= [];
 var food= [];
 
-function rand(a, b)
-{ 
-    return a + Math.random() * b; 
-}
-
 function makefood()
 {
     let bb = {};
     bb.getfood=document.createElement("div");
     bb.getfood.style.left = (bb.pozx = Math.floor(Math.random() * (window.innerWidth-50))) + 'px';
     bb.getfood.style.top = (bb.pozy = Math.floor(Math.random() * (window.innerHeight-50))) + 'px';
-    bb.getfood.style.width = 50 + 'px';
-    bb.getfood.style.height = 50 + 'px';
+    bb.getfood.style.width = 40 + 'px';
+    bb.getfood.style.height = 40 + 'px';
+    bb.getfood.style.borderRadius = '50%';
     bb.getfood.style.position = 'absolute';
     bb.getfood.style.background = "red";
 
@@ -27,11 +23,12 @@ function makeball()
 
     bb.race=Math.floor(Math.random() * 3);
 
-    bb.hunger = 49;
+    bb.hunger = 25;
     bb.velx = 0;
     bb.vely = 0;
     bb.pozx = Math.floor(Math.random() * (window.innerWidth-100));
     bb.pozy = Math.floor(Math.random() * (window.innerHeight-100));
+    bb.vision = 500;
 
     bb.getball=document.createElement("div");
     bb.getball.style.width = 100 + 'px';
@@ -57,6 +54,7 @@ function makechildball(ball)
     bb.vely = 0;
     bb.pozx = ball.pozx+50;
     bb.pozy = ball.pozy;
+    bb.vision = ball.vision;
 
     bb.getball=document.createElement("div");
     bb.getball.style.width = 100 + 'px';
@@ -92,6 +90,25 @@ function losehunger(ball)
     ball.hunger-=0.01;
 }
 
+function idle(ball)
+{
+        negx=Math.floor(Math.random() * 2);
+        negy=Math.floor(Math.random() * 2);
+        ball.velx=Math.random();
+        ball.vely=Math.random();
+        if(negx==1)ball.velx*=-1;
+        if(negy==1)ball.vely*=-1;
+}
+
+function outofbounds(ball)
+{
+    if(ball.pozx>(window.innerWidth-100) || ball.pozx<0)
+        return true;
+    if(ball.pozy>(window.innerHeight-100) || ball.pozy<0)
+        return true;
+     return false;
+}
+
 function move(ball)
 {
     ball.pozx += ball.velx;
@@ -106,7 +123,7 @@ function create()
     {
         ballz.push(makeball());
     }
-    for(let i=0;i<10;i++)
+    for(let i=0;i<100;i++)
     {
         food.push(makefood());
     }
@@ -122,6 +139,15 @@ function spawnfood()
 
 function update()
 {
+    ///delete out of bounds
+    for(let i=0;i<ballz.length;i++)
+    {
+        if(outofbounds(ballz[i])==true)
+        {
+            ballz[i].getball.remove();
+            ballz.splice(i,1);
+        }
+    }
     ///devide and spawn
     for(let i=0;i<ballz.length;i++)
     {
@@ -142,12 +168,12 @@ function update()
             ballz.splice(i,1);
         }
     }
-    ///Movement
+    /// Rendering Movement
     for(let i=0;i<ballz.length;i++)
     {
         move(ballz[i]);
     }
-    ///Eating
+    ///Changing velocity for eating and idle and eating
     for(let i=0;i<ballz.length;i++)
     {
         for(let j=0;j<food.length;j++)
@@ -155,7 +181,12 @@ function update()
             var distantax = ballz[i].pozx-food[j].pozx;
             var distantay = ballz[i].pozy-food[j].pozy;
             var distanta = Math.sqrt(distantax * distantax + distantay * distantay);
-            if(distanta>100 && distanta<500)
+            if(distanta>ballz[i].vision && ballz[i].velx==0 && ballz[i].vely==0)
+            {
+                idle(ballz[i]);
+            }
+            else
+            if(distanta>100 && distanta<ballz[i].vision)
             {
                 goeatvelocity(ballz[i],food[j]);
             }
@@ -168,7 +199,6 @@ function update()
             }
         }
     }
-    
 }
 
 setInterval(spawnfood,10000);
