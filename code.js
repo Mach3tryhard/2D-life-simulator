@@ -102,7 +102,7 @@ function move(ball)
 
 function create()
 {
-    for(let i=0;i<1;i++)
+    for(let i=0;i<10;i++)
     {
         ballz.push(makeball());
     }
@@ -114,7 +114,7 @@ function create()
 
 function spawnfood()
 {
-    for(let i=0;i<10;i++)
+    for(let i=0;i<100;i++)
     {
         food.push(makefood());
     }
@@ -171,6 +171,6 @@ function update()
     
 }
 
-setInterval(spawnfood,500);
+setInterval(spawnfood,10000);
 create();
 setInterval(update,1);
