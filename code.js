@@ -27,7 +27,7 @@ function makeball()
 
     bb.race=Math.floor(Math.random() * 3);
 
-    bb.hunger = 0;
+    bb.hunger = 50;
     bb.velx = 0;
     bb.vely = 0;
     bb.pozx = Math.floor(Math.random() * (window.innerWidth-100));
@@ -58,7 +58,7 @@ function makeball()
 function eat(ball,food)
 {
     food.getfood.remove();
-    ball.hunger++;
+    ball.hunger+=5;
 }
 
 function goeatvelocity(ball,food)
@@ -68,6 +68,11 @@ function goeatvelocity(ball,food)
     var distanta = Math.sqrt(distantax * distantax + distantay * distantay);
     ball.velx=-distantax/distanta;
     ball.vely=-distantay/distanta;
+}
+
+function losehunger(ball)
+{
+    ball.hunger-=0.025;
 }
 
 function move(ball)
@@ -100,6 +105,16 @@ function spawnfood()
 
 function update()
 {
+    ///hunger and die
+    for(let i=0;i<ballz.length;i++)
+    {
+        losehunger(ballz[i]);
+        if(ballz[i].hunger<=0)
+        {
+            ballz[i].getball.remove();
+            ballz.splice(i,1);
+        }
+    }
     ///Movement
     for(let i=0;i<ballz.length;i++)
     {
