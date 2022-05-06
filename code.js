@@ -28,7 +28,14 @@ function makeball()
     bb.vely = 0;
     bb.pozx = Math.floor(Math.random() * (window.innerWidth-100));
     bb.pozy = Math.floor(Math.random() * (window.innerHeight-100));
-    bb.vision = 500;
+
+    if(bb.race==0)bb.bonusv=0.1;  
+    if(bb.race==1)bb.bonusv=0.25;
+    if(bb.race==2)bb.bonusv=0;
+
+    if(bb.race==0)bb.vision=500;  
+    if(bb.race==1)bb.vision=250;
+    if(bb.race==2)bb.vision=1000;
 
     bb.getball=document.createElement("div");
     bb.getball.style.width = 100 + 'px';
@@ -49,12 +56,13 @@ function makechildball(ball)
 
     bb.race=ball.race;
 
-    bb.hunger = ball.hunger/2;
+    bb.hunger = ball.hunger/4;
     bb.velx = 0;
     bb.vely = 0;
     bb.pozx = ball.pozx+50;
     bb.pozy = ball.pozy;
     bb.vision = ball.vision;
+    bb.bonusv = ball.bonusv;
 
     bb.getball=document.createElement("div");
     bb.getball.style.width = 100 + 'px';
@@ -111,8 +119,10 @@ function outofbounds(ball)
 
 function move(ball)
 {
-    ball.pozx += ball.velx;
-    ball.pozy += ball.vely;
+    if(ball.velx<0)ball.pozx += ball.velx-ball.bonusv;
+    else ball.pozx += ball.velx+ball.bonusv;
+    if(ball.vely<0)ball.pozy += ball.vely-ball.bonusv;
+    else ball.pozy += ball.vely+ball.bonusv;
     ball.getball.style.left = ball.pozx+'px';
     ball.getball.style.top = ball.pozy+'px';
 }
@@ -154,7 +164,7 @@ function update()
         if(ballz[i].hunger>50)
         {
             ballz.push(makechildball(ballz[i]));
-            ballz[i].hunger/=2;
+            ballz[i].hunger/=4;
             ballz[i].pozx-=50;
         }
     }
